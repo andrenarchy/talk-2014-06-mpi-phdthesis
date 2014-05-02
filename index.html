@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Deflated Krylov subspace methods for nonlinear Schrödinger problems</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--This one seems to work all the time, but really small on ipad-->
+    <!--<meta name="viewport" content="initial-scale=0.4">-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" media="all" href="theme/css/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+    <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+    <link rel="stylesheet" media="all" href="theme/css/jsxgraph.css">
+    <script type="text/javascript" src="js/jsxgraphcore.js"></script>
+    <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+    <!--MathJax-->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: {
+          equationNumbers: {
+            autoNumber: 'AMS'
+          },
+          Macros: {
+            x: '\\mathbf{x}',
+            C: '\\mathbb{C}',
+            R: '\\mathbb{R}',
+            A: '\\mathbf{A}',
+            n: '\\mathbf{n}',
+            i: '\\text{i}',
+            id: '\\mathsf{id}',
+            vsH: '\\mathcal{H}',
+            vsL: '\\mathcal{L}',
+            vsK: '\\mathcal{K}',
+            vsN: '\\mathcal{N}',
+            vsR: '\\mathcal{R}',
+            vsV: '\\mathcal{V}',
+            vsW: '\\mathcal{W}',
+            vsX: '\\mathcal{X}',
+            vsY: '\\mathcal{Y}',
+            diag: '\\operatorname{diag}',
+            Im: '\\operatorname{Im}',
+            Re: '\\operatorname{Re}',
+            Span: '\\operatorname{span}',
+            ip: ['\\langle #1,#2 \\rangle', 2],
+            ipdots: '\\ip{\\cdot}{\\cdot}',
+            nrm: ['\\| #1 \\|', 1],
+            nrmdot: '\\nrm{\\cdot}',
+            lra: '\\longrightarrow',
+            LRA: '\\Longrightarrow',
+            LLRA: '\\Longleftrightarrow'
+          }
+        },
+        skipStartupTypeset: true
+      });
+    </script>
+    <!--script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
+    <script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+      document.addEventListener('slideenter', function(e) {
+          MathJax.Hub.Queue(["Typeset", MathJax.Hub, e.target]);
+          var next = document.getElementsByClassName('next')[0];
+          if (next) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, next]);
+          }
+          var past = document.getElementsByClassName('past')[0];
+          if (past) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, past]);
+          }
+      });
+    </script>
+    <!--MathJax end-->
+    <script type="text/javascript">
+        JXG.Options.text.useMathJax = true;
+        function onSlideEnter(slide_id, callback) {
+            document.addEventListener('slideenter', function(e) {
+                if (e.target.id == slide_id) {
+                    callback();
+                }
+            });
+        }
+        function inner(x,y) {
+            return x[0]*y[0]+x[1]*y[1];
+        }
+        function norm(x) {
+            return Math.sqrt(inner(x,x));
+        }
+        // computes a*x+y
+        function daxpy(a, x, y) {
+            return [a*x[0]+y[0], a*x[1]+y[1]];
+        }
+        function proj(X, Y, z) {
+            return daxpy( inner(Y,z)/inner(Y,X), X, [0,0]);
+        }
+        function orth(x) {
+            return [x[1], -x[0]];
+        }
+        function addMathLabel(b, p, text) {
+            return b.create('text', [
+                    function() {return p.X();},
+                    function() {return p.Y();},
+                    function() {return text;}
+                    ]);
+        }
+    </script>
+  </head>
+
+  <body style="opacity: 0">
+
+    <slides>
+
+      <slide class="logoslide nobackground">
+        <article class="flexbox vcenter">
+          <span><img src="images/matheon-w-text.svg"></span>
+        </article>
+      </slide>
+
+      <slide class="title-slide segue nobackground">
+        <aside class="gdbar"><img src="images/matheon-logo-color.svg"></aside>
+        <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+        <hgroup class="auto-fadein">
+          <h1 data-config-title><!-- populated from slide_config.json --></h1>
+          <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+          <p>
+            <h2 data-config-presenter><!-- populated from slide_config.json --></h2>
+          </p>
+        </hgroup>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Motivation</h2>
+        </hgroup>
+        <article>
+          <dl>
+            <dt>The problem:</dt>
+            <dd>a sequence of linear systems
+              \[
+                A_i x_i = b_i\quad\text{for}\quad i=1,2,...
+              \]
+              with \(A_{i+1}\approx A_i\) and \(b_{i+1}\approx b_i\).
+            </dd>
+
+            <dt>A solution:</dt>
+            <dd><p>recycling via <em>deflation</em>.</p>
+              <p>Apply Krylov subspace method to
+                \[
+                  P_i A_i x_i = P_i b_i,
+                \]
+                where \(P_i\) is
+              </p>
+              <ul>
+                <li>a projection that removes "unwanted" portions of
+                  \(A_i\).</li>
+                <li>constructed with data from the solution process of
+                  \(A_{i-1}x_{i-1}=b_{i-1}\).</li>
+              </ul>
+            </dd>
+          </dl>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Scope of this talk</h2>
+        </hgroup>
+        <article>
+          <dl>
+            <dt>Open question:</dt>
+            <dd><p>automatic selection of deflation vectors.</p></dd>
+
+            <dt>Required:</dt>
+            <dd><p>perturbation theory for</p>
+              <ul>
+                <li>projections</li>
+                <li>spectra of deflated matrices</li>
+                <li>Krylov subspace methods</li>
+              </ul>
+            </dd>
+
+            <dt>Then:</dt>
+            <dd><p>new convergence bounds for deflated CG, MINRES and
+              GMRES that can provide guidance for the automatic selection of
+              deflation vectors for recycling.</p></dd>
+          </dl>
+        </article>
+      </slide>
+
+    <slide id="slide_picz">
+        <hgroup>
+            <h2>Orthogonal vs. oblique projections</h2>
+        </hgroup>
+        <article style="position: relative;">
+            <figure style="width: 48%; position: absolute; top: 0; left: 0;">
+                <div id="proj_ortho" class="jxgbox plot"></div>
+                <figcaption>Orthogonal projection \(P_{\vsX}=X(X^*X)^{-1}X^*\)</figcaption>
+            </figure>
+            <script type="text/javascript">
+                proj_ortho = null;
+                onSlideEnter('slide_picz', function() {
+                    if (!proj_ortho) {
+                        var b = JXG.JSXGraph.initBoard('proj_ortho', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                        var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                        addMathLabel(b, px, '\\(\\vsX\\)');
+                        var lX = b.create('line',['0','X']);
+                        var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                        addMathLabel(b, pz, '\\(z\\)');
+                        function orthoproj() {
+                            return proj( [px.X(),px.Y()], [px.X(),px.Y()], [pz.X(),pz.Y()]);
+                        }
+                        var Pz = b.create('point', [function() {return orthoproj()[0];}, function() {return orthoproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                        addMathLabel(b, Pz, '\\(P_\\vsX z\\)');
+                        var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                        proj_ortho = b;
+                    }
+                });
+            </script>
+            <figure style="width: 48%; position: absolute; top: 0; right: 0;">
+                <div id="proj_obli" class="jxgbox plot"></div>
+                <figcaption>
+                    Oblique projection
+                    \(P_{\vsX,\vsY} = X (Y^*X)^{-1}Y^*\)
+                    where \(\vsY^\perp=\vsR(Y^\perp)\).
+                </figcaption>
+            </figure>
+            <script type="text/javascript">
+                proj_obli = null;
+                onSlideEnter('slide_picz', function() {
+                    if(!proj_obli) {
+                        var b = JXG.JSXGraph.initBoard('proj_obli', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                        var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                        addMathLabel(b, px, '\\(\\vsX \\)');
+                        var lX = b.create('line',['0','X']);
+                        var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                        addMathLabel(b, py, '\\(\\vsY \\)');
+                        var lY = b.create('line',['0','Y']);
+                        var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                        addMathLabel(b, pz, '\\(z \\)');
+                        function obliqueproj() {
+                            return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                        }
+                        var Pz = b.create('point', [function() {return obliqueproj()[0];}, function() {return obliqueproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                        addMathLabel(b, Pz, '\\(P_{\\vsX,\\vsY}z \\)');
+                        var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                        proj_obli = b;
+                    }
+                });
+            </script>
+        </article>
+    </slide>
+
+    <slide id="slide_bound">
+        <hgroup>
+            <h2>Bounds in action</h2>
+        </hgroup>
+        <article>
+            <figure style="width: 100%; ">
+                <div id="proj_bound" class="jxgbox plot"></div>
+                <figcaption>
+                    \(\nrm{P_{\vsX,\vsY}z-P_{\vsV,\vsW}z}=\)&nbsp;<span id="normresult">0.0</span>,<br/>
+                    bound: \(\frac{
+                \cos\theta_{\min}(\vsW^\perp,\vsY) + 
+                \cos\theta_{\min}(\vsV^\perp,\vsX)}{
+                \cos\theta_{\max}(\vsV,\vsW^\perp) 
+                \cos\theta_{\max}(\vsX,\vsY^\perp)}
+                \) = <span id="boundresult">0.0</span>.
+                </figcaption>
+            </figure>
+            <script type="text/javascript">
+                proj_bound = null;
+                onSlideEnter('slide_bound', function() {
+                    if(!proj_bound) {
+                        var b = JXG.JSXGraph.initBoard('proj_bound', {boundingbox: [-3, -1.5, 3, 1.5],keepaspectratio: true});
+                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#000000'});
+                        var c = b.create('circle', [p0, 1]);
+                        var pz = b.create('glider', [1,1,c], {name:'z',size:4,withLabel:false});
+                        addMathLabel(b, pz, '\\(z \\)');
+
+                        var px = b.create('point',[-1.2,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                        addMathLabel(b, px, '\\(\\vsX \\)');
+                        var lX = b.create('line',['0','X']);
+                        var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                        addMathLabel(b, py, '\\(\\vsY \\)');
+                        var lY = b.create('line',['0','Y']);
+                        addMathLabel(b, pz, '\\(z \\)');
+                        function projXY() {
+                            return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                        }
+                        var PXYz = b.create('point', [function() {return projXY()[0];}, function() {return projXY()[1];}], {name:'PXYz',size:4,withLabel:false});
+                        addMathLabel(b, PXYz, '\\(P_{\\vsX,\\vsY}z \\)');
+                        var lzPXYz = b.create('line', ['z','PXYz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+
+                        var pv = b.create('point',[-1.2,0.2], {name:'V',size:4,color:'#5E5E5E',withLabel:false});
+                        addMathLabel(b, pv, '\\(\\vsV \\)');
+                        var lV = b.create('line',['0','V'],{strokeColor:'#5E5E5E'});
+                        var pw = b.create('point',[-0.7,1], {name:'W',size:4,color:'#5E5E5E',withLabel:false});
+                        addMathLabel(b, pw, '\\(\\vsW \\)');
+                        var lW = b.create('line',['0','W'],{strokeColor:'#5E5E5E'});
+                        function projVW() {
+                            return proj( [pv.X(),pv.Y()], [pw.Y(),-pw.X()], [pz.X(),pz.Y()]);
+                        }
+                        var PVWz = b.create('point', [function() {return projVW()[0];}, function() {return projVW()[1];}], {name:'PVWz',size:4,withLabel:false});
+                        var lPVWXYz = b.create('line',['PVWz','PXYz'],{strokeColor:'#ff0000', straightFirst:false, straightLast:false, strokeWidth:2});
+
+                        addMathLabel(b, PVWz, '\\(P_{\\vsV,\\vsW}z \\)');
+                        var lzPVWz = b.create('line', ['z','PVWz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2,strokeColor:'#5E5E5E'});
+
+                        b.addHook(function(){
+                                var x = [px.X(),px.Y()],
+                                    y = [py.X(),py.Y()],
+                                    v = [pv.X(),pv.Y()],
+                                    w = [pw.X(),pw.Y()],
+                                    zXY = [PXYz.X(),PXYz.Y()],
+                                    zVW = [PVWz.X(),PVWz.Y()];
+                                var normreal = norm(daxpy(-1,zXY,zVW));
+                                var normspan = document.getElementById('normresult');
+                                normspan.replaceChild( document.createTextNode(normreal.toFixed(4)), normspan.firstChild);
+
+                                var cosa = Math.abs(inner(w,y)/(norm(w)*norm(y)));
+                                var cosb = Math.abs(inner(x,v)/(norm(x)*norm(v)));
+                                var cosg = Math.abs(inner(v,orth(w))/(norm(v)*norm(orth(w))));
+                                var cosd = Math.abs(inner(x,orth(y))/(norm(x)*norm(orth(y))));
+                                var bound = (Math.sin(Math.acos(cosa))+Math.sin(Math.acos(cosb)))/(cosg*cosd);
+                                var boundspan = document.getElementById('boundresult');
+                                boundspan.replaceChild( document.createTextNode(bound.toFixed(4)), boundspan.firstChild);
+
+                            }, 'move');
+
+                        proj_bound = b;
+                    }
+                });
+            </script>
+        </article>
+    </slide>
+
+      <slide id="slide_bound">
+        <hgroup>
+          <h2>References</h2>
+        </hgroup>
+        <article style="font-size:72%;">
+          <ul>
+            <li>
+              <strong>These slides can be watched online:</strong><br>
+              <a href="https://andrenarchy.github.io/talk-2014-05-delft-phdthesis">https://andrenarchy.github.io/talk-2014-05-delft-phdthesis</a>
+            </li>
+            <li>
+              <strong>Software used for experiments (free open source software):</strong>
+              <ul>
+                <li>
+                  G.,
+                  <em>KryPy: Krylov subspace methods package for Python.</em><br>
+                  <a href="https://github.com/andrenarchy/krypy">https://github.com/andrenarchy/krypy</a>
+                </li>
+                <li>
+                  G. and Schlömer,
+                  <em>PyNosh: Python framework for nonlinear Schrödinger equations.</em><br>
+                  <a href="https://bitbucket.org/nschloe/pynosh">https://bitbucket.org/nschloe/pynosh</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              Chapman and Saad,
+              <em>Deflated and augmented Krylov subspace techniques.</em>
+              1997. Numer. Linear Algebra Appl.
+            </li>
+            <li>
+              Erhel, Burrage and Pohl,
+              <em>Restarted GMRES preconditioned by deflation.</em>
+              1996. J. Comput. Appl. Math.
+            </li>
+            <li>
+              G., Gutknecht, Liesen and Nabben,
+              <em>A framework for deflated and augmented Krylov subspace methods.</em>
+              2013. SIMAX.
+              <a href="http://arxiv.org/abs/1206.1506">http://arxiv.org/abs/1206.1506</a>
+            </li>
+            <li>
+              G. and Schlömer,
+              <em>Preconditioned recycling Krylov subspace methods for self-adjoint problems.</em>
+              2013 (under revision).
+              <a href="http://arxiv.org/abs/1208.0264">http://arxiv.org/abs/1208.0264</a>
+            </li>
+            <li>
+              Sifuentes, Embree and Morgan,
+              <em>GMRES convergence for perturbed coefficient matrices,
+                with Application to Approximate Deflation Preconditioning.</em>
+              2013. SIMAX.
+            </li>
+            <li>
+              Simoncini and Szyld,
+              <em>On the Superlinear Convergence of MINRES.</em>
+              2013. In Num. Math. and Adv. Appl. 2011.
+            </li>
+            <li>
+              Wang, de Sturler and Paulino,
+              <em>Large-scale topology optimization using preconditioned Krylov subspace methods with recycling.</em>
+              2007. Internat. J. Numer. Methods Engrg.
+            </li>
+          </ul>
+        </article>
+      </slide>
+
+      <slide class="thank-you-slide segue nobackground">
+        <aside class="gdbar right"><img src="images/matheon-logo-color.svg"></aside>
+        <article class="flexbox vleft auto-fadein">
+          <h2>Thank you!</h2>
+          <p>Questions?</p>
+        </article>
+        <p class="auto-fadein" data-config-contact>
+          <!-- populated from slide_config.json -->
+        </p>
+      </slide>
+
+      <slide class="dark nobackground">
+        <article class="flexbox vcenter">
+          <div class="logoslide"><img src="images/matheon-w-text-white.svg"></div>
+          <div><img style="width: 150px; margin-top:100px;" src="images/html5rocks.png"></div>
+        </article>
+      </slide>
+
+      <slide class="backdrop"></slide>
+
+    </slides>
+
+    <!--[if IE]>
+    <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
