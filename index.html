@@ -189,162 +189,194 @@ URL: https://code.google.com/p/io-2012-slides
               </ul>
             </dd>
 
-            <dt>Then:</dt>
-            <dd><p>new convergence bounds for deflated CG, MINRES and
-              GMRES that can provide guidance for the automatic selection of
-              deflation vectors for recycling.</p></dd>
+            <dt>Theory leads to:</dt>
+            <dd><ul>
+              <li>new convergence bounds for deflated CG, MINRES and
+                GMRES</li>
+              <li>guidance for the automatic selection of
+                deflation vectors for recycling</li>
+              <ul>
+              </dd>
           </dl>
         </article>
       </slide>
 
-    <slide id="slide_picz">
-        <hgroup>
-            <h2>Orthogonal vs. oblique projections</h2>
-        </hgroup>
-        <article style="position: relative;">
-            <figure style="width: 48%; position: absolute; top: 0; left: 0;">
-                <div id="proj_ortho" class="jxgbox plot"></div>
-                <figcaption>Orthogonal projection \(P_{\vsX}=X(X^*X)^{-1}X^*\)</figcaption>
-            </figure>
-            <script type="text/javascript">
-                proj_ortho = null;
-                onSlideEnter('slide_picz', function() {
-                    if (!proj_ortho) {
-                        var b = JXG.JSXGraph.initBoard('proj_ortho', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
-                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
-                        var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                        addMathLabel(b, px, '\\(\\vsX\\)');
-                        var lX = b.create('line',['0','X']);
-                        var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
-                        addMathLabel(b, pz, '\\(z\\)');
-                        function orthoproj() {
-                            return proj( [px.X(),px.Y()], [px.X(),px.Y()], [pz.X(),pz.Y()]);
-                        }
-                        var Pz = b.create('point', [function() {return orthoproj()[0];}, function() {return orthoproj()[1];}], {name:'Pz',size:4,withLabel:false});
-                        addMathLabel(b, Pz, '\\(P_\\vsX z\\)');
-                        var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-                        proj_ortho = b;
-                    }
-                });
-            </script>
-            <figure style="width: 48%; position: absolute; top: 0; right: 0;">
-                <div id="proj_obli" class="jxgbox plot"></div>
-                <figcaption>
-                    Oblique projection
-                    \(P_{\vsX,\vsY} = X (Y^*X)^{-1}Y^*\)
-                    where \(\vsY^\perp=\vsR(Y^\perp)\).
-                </figcaption>
-            </figure>
-            <script type="text/javascript">
-                proj_obli = null;
-                onSlideEnter('slide_picz', function() {
-                    if(!proj_obli) {
-                        var b = JXG.JSXGraph.initBoard('proj_obli', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
-                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
-                        var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                        addMathLabel(b, px, '\\(\\vsX \\)');
-                        var lX = b.create('line',['0','X']);
-                        var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
-                        addMathLabel(b, py, '\\(\\vsY \\)');
-                        var lY = b.create('line',['0','Y']);
-                        var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
-                        addMathLabel(b, pz, '\\(z \\)');
-                        function obliqueproj() {
-                            return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
-                        }
-                        var Pz = b.create('point', [function() {return obliqueproj()[0];}, function() {return obliqueproj()[1];}], {name:'Pz',size:4,withLabel:false});
-                        addMathLabel(b, Pz, '\\(P_{\\vsX,\\vsY}z \\)');
-                        var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-                        proj_obli = b;
-                    }
-                });
-            </script>
-        </article>
-    </slide>
+      <slide id="slide_picz">
+          <hgroup>
+              <h2>Orthogonal vs. oblique projections</h2>
+          </hgroup>
+          <article style="position: relative;">
+              <figure style="width: 48%; position: absolute; top: 0; left: 0;">
+                  <div id="proj_ortho" class="jxgbox plot"></div>
+                  <figcaption>Orthogonal projection onto \(\vsX\): \(P_{\vsX}=X(X^*X)^{-1}X^*\)</figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_ortho = null;
+                  onSlideEnter('slide_picz', function() {
+                      if (!proj_ortho) {
+                          var b = JXG.JSXGraph.initBoard('proj_ortho', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX\\)');
+                          var lX = b.create('line',['0','X']);
+                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z\\)');
+                          function orthoproj() {
+                              return proj( [px.X(),px.Y()], [px.X(),px.Y()], [pz.X(),pz.Y()]);
+                          }
+                          var Pz = b.create('point', [function() {return orthoproj()[0];}, function() {return orthoproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                          addMathLabel(b, Pz, '\\(P_\\vsX z\\)');
+                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                          proj_ortho = b;
+                      }
+                  });
+              </script>
+              <figure style="width: 48%; position: absolute; top: 0; right: 0;">
+                  <div id="proj_obli" class="jxgbox plot"></div>
+                  <figcaption>
+                      Oblique projection onto \(\vsX\) along
+                      \(\vsY=\vsR(Y)^\perp\):
+                      \(P_{\vsX,\vsY} = X (Y^*X)^{-1}Y^*\)
+                  </figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_obli = null;
+                  onSlideEnter('slide_picz', function() {
+                      if(!proj_obli) {
+                          var b = JXG.JSXGraph.initBoard('proj_obli', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX \\)');
+                          var lX = b.create('line',['0','X']);
+                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, py, '\\(\\vsY \\)');
+                          var lY = b.create('line',['0','Y']);
+                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z \\)');
+                          function obliqueproj() {
+                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                          }
+                          var Pz = b.create('point', [function() {return obliqueproj()[0];}, function() {return obliqueproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                          addMathLabel(b, Pz, '\\(P_{\\vsX,\\vsY}z \\)');
+                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                          proj_obli = b;
+                      }
+                  });
+              </script>
+          </article>
+      </slide>
 
-    <slide id="slide_bound">
+      <slide>
         <hgroup>
-            <h2>Bounds in action</h2>
+          <h2>Perturbation bound for projections</h2>
         </hgroup>
         <article>
-            <figure style="width: 100%; ">
-                <div id="proj_bound" class="jxgbox plot"></div>
-                <figcaption>
-                    \(\nrm{P_{\vsX,\vsY}z-P_{\vsV,\vsW}z}=\)&nbsp;<span id="normresult">0.0</span>,<br/>
-                    bound: \(\frac{
-                \cos\theta_{\min}(\vsW^\perp,\vsY) + 
-                \cos\theta_{\min}(\vsV^\perp,\vsX)}{
-                \cos\theta_{\max}(\vsV,\vsW^\perp) 
-                \cos\theta_{\max}(\vsX,\vsY^\perp)}
-                \) = <span id="boundresult">0.0</span>.
-                </figcaption>
-            </figure>
-            <script type="text/javascript">
-                proj_bound = null;
-                onSlideEnter('slide_bound', function() {
-                    if(!proj_bound) {
-                        var b = JXG.JSXGraph.initBoard('proj_bound', {boundingbox: [-3, -1.5, 3, 1.5],keepaspectratio: true});
-                        var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#000000'});
-                        var c = b.create('circle', [p0, 1]);
-                        var pz = b.create('glider', [1,1,c], {name:'z',size:4,withLabel:false});
-                        addMathLabel(b, pz, '\\(z \\)');
-
-                        var px = b.create('point',[-1.2,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                        addMathLabel(b, px, '\\(\\vsX \\)');
-                        var lX = b.create('line',['0','X']);
-                        var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
-                        addMathLabel(b, py, '\\(\\vsY \\)');
-                        var lY = b.create('line',['0','Y']);
-                        addMathLabel(b, pz, '\\(z \\)');
-                        function projXY() {
-                            return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
-                        }
-                        var PXYz = b.create('point', [function() {return projXY()[0];}, function() {return projXY()[1];}], {name:'PXYz',size:4,withLabel:false});
-                        addMathLabel(b, PXYz, '\\(P_{\\vsX,\\vsY}z \\)');
-                        var lzPXYz = b.create('line', ['z','PXYz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-
-                        var pv = b.create('point',[-1.2,0.2], {name:'V',size:4,color:'#5E5E5E',withLabel:false});
-                        addMathLabel(b, pv, '\\(\\vsV \\)');
-                        var lV = b.create('line',['0','V'],{strokeColor:'#5E5E5E'});
-                        var pw = b.create('point',[-0.7,1], {name:'W',size:4,color:'#5E5E5E',withLabel:false});
-                        addMathLabel(b, pw, '\\(\\vsW \\)');
-                        var lW = b.create('line',['0','W'],{strokeColor:'#5E5E5E'});
-                        function projVW() {
-                            return proj( [pv.X(),pv.Y()], [pw.Y(),-pw.X()], [pz.X(),pz.Y()]);
-                        }
-                        var PVWz = b.create('point', [function() {return projVW()[0];}, function() {return projVW()[1];}], {name:'PVWz',size:4,withLabel:false});
-                        var lPVWXYz = b.create('line',['PVWz','PXYz'],{strokeColor:'#ff0000', straightFirst:false, straightLast:false, strokeWidth:2});
-
-                        addMathLabel(b, PVWz, '\\(P_{\\vsV,\\vsW}z \\)');
-                        var lzPVWz = b.create('line', ['z','PVWz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2,strokeColor:'#5E5E5E'});
-
-                        b.addHook(function(){
-                                var x = [px.X(),px.Y()],
-                                    y = [py.X(),py.Y()],
-                                    v = [pv.X(),pv.Y()],
-                                    w = [pw.X(),pw.Y()],
-                                    zXY = [PXYz.X(),PXYz.Y()],
-                                    zVW = [PVWz.X(),PVWz.Y()];
-                                var normreal = norm(daxpy(-1,zXY,zVW));
-                                var normspan = document.getElementById('normresult');
-                                normspan.replaceChild( document.createTextNode(normreal.toFixed(4)), normspan.firstChild);
-
-                                var cosa = Math.abs(inner(w,y)/(norm(w)*norm(y)));
-                                var cosb = Math.abs(inner(x,v)/(norm(x)*norm(v)));
-                                var cosg = Math.abs(inner(v,orth(w))/(norm(v)*norm(orth(w))));
-                                var cosd = Math.abs(inner(x,orth(y))/(norm(x)*norm(orth(y))));
-                                var bound = (Math.sin(Math.acos(cosa))+Math.sin(Math.acos(cosb)))/(cosg*cosd);
-                                var boundspan = document.getElementById('boundresult');
-                                boundspan.replaceChild( document.createTextNode(bound.toFixed(4)), boundspan.firstChild);
-
-                            }, 'move');
-
-                        proj_bound = b;
-                    }
-                });
-            </script>
+            <div class="box" data-title="Theorem (G. 2013)">
+                Let \(\vsV,\vsW,\vsX,\vsY\subseteq\vsH\) be closed and nonzero
+                subspaces such that \(\vsH=\vsV\oplus\vsW=\vsX\oplus\vsY\).
+                Then:
+                \[
+                \nrm{P_{\vsV,\vsW}-P_{\vsX,\vsY}}
+                \leq \frac{
+                \sin\theta_{\max}(\vsW,\vsY) +
+                \sin\theta_{\max}(\vsV,\vsX)}{
+                \sin\theta_{\min}(\vsV,\vsW)
+                \sin\theta_{\min}(\vsX,\vsY)}.
+                \]
+            </div>
+            <p>\(\theta_{\max}(\vsV,\vsW):=\arcsin\|P_\vsV-P_\vsW\|\) is the
+              maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
+            <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\left(
+              \min_{0\neq (v,w)\in\vsV\times\vsW} \frac{\ip{v}{w}}{\nrm{v}\nrm{w}}
+              \right)
+                \) is the
+              maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
         </article>
-    </slide>
+      </slide>
+
+      <slide id="slide_bound">
+          <hgroup>
+              <h2>Perturbation bound in action</h2>
+          </hgroup>
+          <article>
+              <figure style="width: 100%; ">
+                  <div id="proj_bound" class="jxgbox plot"></div>
+                  <figcaption>
+                      \(\nrm{P_{\vsX,\vsY}z-P_{\vsV,\vsW}z}=\)&nbsp;<span id="normresult">0.0</span>,<br/>
+                      bound: \(\frac{
+                  \sin\theta_{\max}(\vsW,\vsY) +
+                  \sin\theta_{\max}(\vsV,\vsX)}{
+                  \sin\theta_{\min}(\vsV,\vsW)
+                  \sin\theta_{\min}(\vsX,\vsY)}
+                  \) = <span id="boundresult">0.0</span>.
+                  </figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_bound = null;
+                  onSlideEnter('slide_bound', function() {
+                      if(!proj_bound) {
+                          var b = JXG.JSXGraph.initBoard('proj_bound', {boundingbox: [-3, -1.5, 3, 1.5],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#000000'});
+                          var c = b.create('circle', [p0, 1]);
+                          var pz = b.create('glider', [1,1,c], {name:'z',size:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z \\)');
+
+                          var px = b.create('point',[-1.2,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX \\)');
+                          var lX = b.create('line',['0','X']);
+                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, py, '\\(\\vsY \\)');
+                          var lY = b.create('line',['0','Y']);
+                          addMathLabel(b, pz, '\\(z \\)');
+                          function projXY() {
+                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                          }
+                          var PXYz = b.create('point', [function() {return projXY()[0];}, function() {return projXY()[1];}], {name:'PXYz',size:4,withLabel:false});
+                          addMathLabel(b, PXYz, '\\(P_{\\vsX,\\vsY}z \\)');
+                          var lzPXYz = b.create('line', ['z','PXYz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+
+                          var pv = b.create('point',[-1.2,0.2], {name:'V',size:4,color:'#5E5E5E',withLabel:false});
+                          addMathLabel(b, pv, '\\(\\vsV \\)');
+                          var lV = b.create('line',['0','V'],{strokeColor:'#5E5E5E'});
+                          var pw = b.create('point',[-0.7,1], {name:'W',size:4,color:'#5E5E5E',withLabel:false});
+                          addMathLabel(b, pw, '\\(\\vsW \\)');
+                          var lW = b.create('line',['0','W'],{strokeColor:'#5E5E5E'});
+                          function projVW() {
+                              return proj( [pv.X(),pv.Y()], [pw.Y(),-pw.X()], [pz.X(),pz.Y()]);
+                          }
+                          var PVWz = b.create('point', [function() {return projVW()[0];}, function() {return projVW()[1];}], {name:'PVWz',size:4,withLabel:false});
+                          var lPVWXYz = b.create('line',['PVWz','PXYz'],{strokeColor:'#ff0000', straightFirst:false, straightLast:false, strokeWidth:2});
+
+                          addMathLabel(b, PVWz, '\\(P_{\\vsV,\\vsW}z \\)');
+                          var lzPVWz = b.create('line', ['z','PVWz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2,strokeColor:'#5E5E5E'});
+
+                          b.addHook(function(){
+                                  var x = [px.X(),px.Y()],
+                                      y = [py.X(),py.Y()],
+                                      v = [pv.X(),pv.Y()],
+                                      w = [pw.X(),pw.Y()],
+                                      zXY = [PXYz.X(),PXYz.Y()],
+                                      zVW = [PVWz.X(),PVWz.Y()];
+                                  var normreal = norm(daxpy(-1,zXY,zVW));
+                                  var normspan = document.getElementById('normresult');
+                                  normspan.replaceChild( document.createTextNode(normreal.toFixed(4)), normspan.firstChild);
+
+                                  var cosa = Math.abs(inner(w,y)/(norm(w)*norm(y)));
+                                  var cosb = Math.abs(inner(x,v)/(norm(x)*norm(v)));
+                                  var cosg = Math.abs(inner(v,orth(w))/(norm(v)*norm(orth(w))));
+                                  var cosd = Math.abs(inner(x,orth(y))/(norm(x)*norm(orth(y))));
+                                  var bound = (Math.sin(Math.acos(cosa))+Math.sin(Math.acos(cosb)))/(cosg*cosd);
+                                  var boundspan = document.getElementById('boundresult');
+                                  boundspan.replaceChild( document.createTextNode(bound.toFixed(4)), boundspan.firstChild);
+
+                              }, 'move');
+
+                          proj_bound = b;
+                      }
+                  });
+              </script>
+          </article>
+      </slide>
 
       <slide id="slide_bound">
         <hgroup>
