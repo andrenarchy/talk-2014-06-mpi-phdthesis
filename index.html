@@ -45,6 +45,7 @@ URL: https://code.google.com/p/io-2012-slides
             vsK: '\\mathcal{K}',
             vsN: '\\mathcal{N}',
             vsR: '\\mathcal{R}',
+            vsU: '\\mathcal{U}',
             vsV: '\\mathcal{V}',
             vsW: '\\mathcal{W}',
             vsX: '\\mathcal{X}',
@@ -268,6 +269,44 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
+          <h2>Assumptions and definitions</h2>
+        </hgroup>
+        <article>
+          <ul>
+            <li>\(Ax=b\) with nonsingular \(A\in\C^{N,N}\)</li>
+            <li>\(U\in\C^{N,k}\) such that \(U^*AU\) is nonsingular (equivalent:
+              \(A\vsU\oplus\vsU^\perp=\C^N\) for
+              \(\vsU:=\vsR(U)\))</li>
+            <li>\(Q:=P_{\vsU^\perp,A\vsU}=I-AU(U^*AU)^{-1}U^*\)</li>
+            <li>\(P:=P_{(A^*\vsU)^\perp,\vsU}=I-U(U^*AU)^{-1}U^*A\)</li>
+          </ul>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Deflation basics</h2>
+        </hgroup>
+        <article>
+          <div class="box" data-title="Theorem">
+            For any initial guess, CG (\(A\) Hpd), MINRES (\(A\) Hermitian) or
+            GMRES applied to
+            \[QAx=Qb\]
+            yields well-defined iterates \(\tilde{x}_n\) and terminates with a
+            solution. The corrected iterates
+            \[ x_n := P\tilde{x}_n + U(U^*AU)^{-1}U^*b \]
+            satisfy \(b-Ax_n=Qb-QA\tilde{x}_n\).
+          </div>
+          <p>Well-known for CG. The result for GMRES/MINRES follows from a
+            theorem by G., Gutknecht, Liesen and Nabben (2013) which
+            characterizes all consistent linear systems \(Ax=b\) with singular
+            matrices for which GMRES is well-defined for all initial guesses:
+            \(\vsR(A)\cap\vsN(A)=\{0\}\).</p>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
           <h2>Perturbation bound for projections</h2>
         </hgroup>
         <article>
@@ -287,7 +326,7 @@ URL: https://code.google.com/p/io-2012-slides
             <p>\(\theta_{\max}(\vsV,\vsW):=\arcsin\|P_\vsV-P_\vsW\|\) is the
               maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
             <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\left(
-              \min_{0\neq (v,w)\in\vsV\times\vsW} \frac{\ip{v}{w}}{\nrm{v}\nrm{w}}
+              \max_{0\neq (v,w)\in\vsV\times\vsW} \frac{|\ip{v}{w}|}{\nrm{v}\nrm{w}}
               \right)
                 \) is the
               maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
@@ -376,6 +415,29 @@ URL: https://code.google.com/p/io-2012-slides
                   });
               </script>
           </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Spectra of deflated operators</h2>
+        </hgroup>
+        <article>
+          <div class="box" data-title="Theorem (G. 2014)">
+            Let \(U_\perp\in\C^{N,N-k}\) such that
+            \(\vsU^\perp=\vsR(U_\perp)\) and \(U_\perp^*U_\perp=I\). Then
+            \[QA=U_\perp (U_\perp^*A^{-1}U_\perp)^{-1} U_\perp^*.\]
+          </div>
+          <div class="box" data-title="Corollary (G. 2014)">
+            For \(k>0\), the spectrum of \(QA\) is
+            \[
+            \Lambda(QA)=\{0\}\cup\Lambda\left(
+              (U_\perp^*A^{-1}U_\perp)^{-1}
+            \right).
+            \]
+          </div>
+          <p>Note that there are no restrictions on symmetry or
+            definiteness.</p>
+        </article>
       </slide>
 
       <slide id="slide_bound">
