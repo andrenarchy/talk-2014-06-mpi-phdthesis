@@ -274,7 +274,7 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
           <ul>
             <li>\(Ax=b\) with nonsingular \(A\in\C^{N,N}\)</li>
-            <li>\(U\in\C^{N,k}\) such that \(U^*AU\) is nonsingular (equivalent:
+            <li>\(U\in\C^{N,m}\) such that \(U^*AU\) is nonsingular (equivalent:
               \(A\vsU\oplus\vsU^\perp=\C^N\) for
               \(\vsU:=\vsR(U)\))</li>
             <li>\(Q:=P_{\vsU^\perp,A\vsU}=I-AU(U^*AU)^{-1}U^*\)</li>
@@ -423,20 +423,19 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
           <div class="box" data-title="Theorem (G. 2014)">
-            Let \(U_\perp\in\C^{N,N-k}\) such that
+            Let \(U_\perp\in\C^{N,N-m}\) such that
             \(\vsU^\perp=\vsR(U_\perp)\) and \(U_\perp^*U_\perp=I\). Then
             \[QA=U_\perp (U_\perp^*A^{-1}U_\perp)^{-1} U_\perp^*.\]
           </div>
           <div class="box" data-title="Corollary (G. 2014)">
-            For \(k>0\), the spectrum of \(QA\) is
+            For \(m>0\), the spectrum of \(QA\) is
             \[
             \Lambda(QA)=\{0\}\cup\Lambda\left(
               (U_\perp^*A^{-1}U_\perp)^{-1}
             \right).
             \]
           </div>
-          <p>Note that there are no restrictions on symmetry or
-            definiteness.</p>
+          <p>Note: no restrictions on symmetry or definiteness.</p>
           <p>If \(U\) spans an \(A\)-invariant subspace, then things are easy.
             But not much is known if \(U\) is only an approximation.</p>
         </article>
@@ -448,16 +447,17 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
           <div class="box" data-title="Theorem (G. 2014)">
-            Let \(A=A^*\), \(U^*U=I\), \(R=AU-A(U^*AU)\), \(\Lambda(U^*AU)=\{\mu_1,\dots,\mu_k\}\)
+            Let \(A=A^*\), \(U^*U=I\), \(R=AU-U(U^*AU)\), \(\Lambda(U^*AU)=\{\mu_1,\dots,\mu_m\}\)
             and
             \(\Lambda(QA)
-            =\{0\}\cup\{\hat{\lambda}_1\leq\dots\leq\hat{\lambda}_{N-k}\}\).
+            =\{0\}\cup\{\hat{\lambda}_1\leq\dots\leq\hat{\lambda}_{N-m}\}\).
             If
             <ul>
               <li>the eigenvalues \(\lambda_1,\dots,\lambda_N\) of \(A\) are
-                sorted appropriately (*),</li>
-              <li>\(\delta_i=\min_{j=1,\dots,k}|\lambda_i-\mu_j|>0\),</li>
-              <li>and \(\mu_{\min}=\min\{|\mu_1|,\dots,|\mu_k|\}>0\) then</li>
+                ordered appropriately (*),</li>
+              <li>\(\delta_i:=\min_{j=1,\dots,m}|\lambda_i-\mu_j|>0\) for a
+                \(1\leq i\leq N-m\),</li>
+              <li>and \(\mu_{\min}:=\min\{|\mu_1|,\dots,|\mu_m|\}>0\) then</li>
             </ul>
             \[
             |\lambda_i - \hat{\lambda}_i|\leq\nrm{R}^2
@@ -465,7 +465,120 @@ URL: https://code.google.com/p/io-2012-slides
             \right).
             \]
           </div>
-          <p>(*) technical (but explicitly given) ordering is omitted here!</p>
+          <p>(*) technical (but explicitly given) ordering is omitted here.</p>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>A priori bounds</h2>
+        </hgroup>
+        <article>
+          <div class="box">
+            Eigenvalue inclusion intervals + a priori bounds (e.g.,
+            \(\kappa\)-bound) \(\lra\) convergence bounds for deflated CG and
+            deflated MINRES for Hermition problems.
+          </div>
+          <p>But:
+            <ul>
+              <li>a priori bounds like the \(\kappa\)-bound only take into
+                account extremal eigenvalues and not the actual
+                distribution.<li>
+              <li>eigenvalues do not tell the whole story.</li>
+              <li>linear asymptotic bounds cannot capture nonlinear convergence
+                histories.</li>
+              <li>what about non-Hermitian/non-normal matrices?</li>
+            </ul>
+          </p>
+          <div class="box">
+            Another approach is required!
+          </div>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>A new approach</h2>
+        </hgroup>
+        <article>
+          <p>Remember: we solve sequences of linear systems!</p>
+          <p>The data that is generated in the solution of one linear system
+            reveals much more than just the Ritz vectors that are used in
+            \(Q\)!</p>
+          <p>Let's assume that a linear system has been solved
+            approximately with deflated GMRES, e.g., GMRES was applied to
+            \[ QAx=Qb, \qquad\text{where}\qquad Q=I-AU(U^*AU)^{-1}U^*.\]
+            \(\lra\) Arnoldi relation \(QAV_n=V_{n+1}\underline{H}_n\).
+          </p>
+          <div class="box" data-title="Question">
+            If \(W=[V_n,U]\widetilde{W}\) is a basis of the new deflation
+            subspace, how does GMRES perform for
+            \[ Q_WAx=Q_Wb,~\text{where}~Q_W=I-AW(W^*AW)^{-1}W^*?\]
+          </div>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Approximate Krylov subspaces</h2>
+        </hgroup>
+        <article>
+          <p>An Arnoldi relation for \(K_i(Q_WA,Q_Wb)\) is usually not available.</p>
+          <p>But an Arnoldi relation for a perturbed matrix and initial vector
+            is available!</p>
+          <div class="box" data-title="Theorem (G. 2014)">
+            Let \(QAV_n=V_{n+1}\underline{H}_n\) be an Arnoldi relation for
+            \(K_n(QA,Qb)\) and \(W=[V_n,U]\widetilde{W}\in\C^{N,k}\). Then an
+            Arnoldi relation
+            \[ (Q_WA+F_i)\widehat{V}_i
+              =\widehat{V}_{i+1}\widehat{\underline{H}}_i
+            \]
+            for \(K_i(Q_WA+F_i, Q_Wb+f)\) can be constructed for all \(1\leq
+            i\leq n+m-k\) without
+            applications of \(Q_W\) or \(A\) such that \(F_i\) and \(f\) are
+            optimal with respect to \(K_i(QA,Qb)+\vsU\). Furthermore,
+            \(\nrm{F_i}\) is available and \(\nrm{F_1}\leq\nrm{F_2}\leq\dots\)
+            holds.
+          </div>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Krylov subspace methods with perturbations</h2>
+        </hgroup>
+        <article>
+          <p>Recent results by Sifuentes, Embree and Morgan (2013) for
+            perturbed matrix.</p>
+          <p>Generalized for perturbed right hand sides (G. 2014)</p>
+          <p>Applied to deflation with the previous notation:</p>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Deflation bound via approximate Krylov subspaces</h2>
+        </hgroup>
+        <article>
+          <div class="box" data-title="Theorem (G. 2014)">
+            The \(i\)-th residual \(\widehat{r}_i\) of GMRES applied to \(Q_WAx=Q_Wb\)
+            satisfy
+            \[
+            \nrm{\widehat{r}_i}\leq\nrm{\overline{r}_i}
+              + \frac{|\partial\Lambda_\delta|}{2\pi\delta}
+              \left(\frac{\epsilon_i}{\delta-\epsilon_i}
+              (\gamma+\beta)+\beta
+              \right)
+              \max_{\lambda\in\partial\Lambda_\delta}|p_i(\lambda)|,
+            \]
+            where
+            <ul>
+              <li>\(\overline{r}_i=p_i(\widehat{H}_n)\gamma e_1\) is the
+                \(i\)-th residual of GMRES applied to \(\widehat{H}_ny=\gamma
+                e_1\) with the residual polynomial \(p_i\)</li>
+              <li>\(\partial\Lambda_\delta:=\partial\Lambda_\delta(Q_WA)\)</li>
+            </ul>
+          </div>
         </article>
       </slide>
 
