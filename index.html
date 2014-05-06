@@ -537,8 +537,8 @@ URL: https://code.google.com/p/io-2012-slides
             i\leq n+m-k\) without
             applications of \(Q_W\) or \(A\) such that \(F_i\) and \(f\) are
             optimal with respect to \(K_i(QA,Qb)+\vsU\). Furthermore,
-            \(\nrm{F_i}\) is available and \(\nrm{F_1}\leq\nrm{F_2}\leq\dots\)
-            holds.
+            \(\nrm{F_i}\) and \(\nrm{f}\) are available and
+            \(\nrm{F_1}\leq\nrm{F_2}\leq\dots\) holds.
           </div>
         </article>
       </slide>
@@ -548,21 +548,21 @@ URL: https://code.google.com/p/io-2012-slides
           <h2>Krylov subspace methods with perturbations</h2>
         </hgroup>
         <article>
-          <p>Recent results by Sifuentes, Embree and Morgan (2013) for
+          <p>TODO: pic delay</p>
+          <p>Recent results by Sifuentes, Embree and Morgan (2013) for a
             perturbed matrix.</p>
-          <p>Generalized for perturbed right hand sides (G. 2014)</p>
-          <p>Applied to deflation with the previous notation:</p>
+          <p>Generalized for a perturbed right hand side (G. 2014).</p>
         </article>
       </slide>
 
       <slide>
         <hgroup>
-          <h2>Deflation bound via approximate Krylov subspaces</h2>
+          <h2>Approximate Krylov subspace bound</h2>
         </hgroup>
         <article>
           <div class="box" data-title="Theorem (G. 2014)">
-            The \(i\)-th residual \(\widehat{r}_i\) of GMRES applied to \(Q_WAx=Q_Wb\)
-            satisfy
+            The \(i\)-th residual \(\widehat{r}_i\) of GMRES applied to
+            \(Q_WAx=Q_Wb\) satisfies
             \[
             \nrm{\widehat{r}_i}\leq\nrm{\overline{r}_i}
               + \frac{|\partial\Lambda_\delta|}{2\pi\delta}
@@ -571,12 +571,16 @@ URL: https://code.google.com/p/io-2012-slides
               \right)
               \max_{\lambda\in\partial\Lambda_\delta}|p_i(\lambda)|,
             \]
-            where
+            for all \(\delta>\epsilon_i\) where
             <ul>
               <li>\(\overline{r}_i=p_i(\widehat{H}_n)\gamma e_1\) is the
                 \(i\)-th residual of GMRES applied to \(\widehat{H}_ny=\gamma
                 e_1\) with the residual polynomial \(p_i\)</li>
-              <li>\(\partial\Lambda_\delta:=\partial\Lambda_\delta(Q_WA)\)</li>
+              <li>\(\partial\Lambda_\delta
+                :=\partial\Lambda_\delta\left( (Q_WA+F_i)|_{\vsW^\perp}\right)\) is
+                the boundary of the \(\delta\)-pseudospectrum</li>
+              <li>\(\epsilon_i=\nrm{F_i}\), \(\beta=\nrm{f}\) and
+                \(\gamma=\nrm{Q_Wb}\)</li>
             </ul>
           </div>
         </article>
