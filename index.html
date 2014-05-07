@@ -548,9 +548,15 @@ URL: https://code.google.com/p/io-2012-slides
           <h2>Krylov subspace methods with perturbations</h2>
         </hgroup>
         <article>
-          <p>TODO: pic delay</p>
-          <p>Recent results by Sifuentes, Embree and Morgan (2013) for a
-            perturbed matrix.</p>
+          <p>
+            <figure style="width: 100%; text-align: center; ">
+              <img style="width: 75%" src="images/pert-gmres.svg">
+              <figcaption>\(A\in\C^{23\times23}\) and
+                \(\nrm{F}=\nrm{f}=10^{-8}\)</figcaption>
+            </figure>
+          </p>
+          <p>All is not lost: recent results by Sifuentes, Embree and Morgan
+            (2013) for a perturbed matrix.</p>
           <p>Generalized for a perturbed right hand side (G. 2014).</p>
         </article>
       </slide>
@@ -586,6 +592,91 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
       </slide>
 
+      <slide>
+        <hgroup>
+          <h2>Convection-diffusion</h2>
+        </hgroup>
+        <article>
+          $$
+          \begin{align*}
+          -\nu\Delta u + w\cdot\nabla u &= 0
+          \quad\text{in}\quad\Omega=]-1,1[\times]-1,1[ \\
+          \text{and}\quad u&=q\quad\text{on}\quad\partial\Omega.
+          \end{align*}
+          $$
+          <figure style="width: 100%; text-align: center; ">
+            <img style="width: 60%" src="images/conv-diff-sol.png">
+            <figcaption>Finite element solution</figcaption>
+          </figure>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Bound for convection-diffusion</h2>
+          Same linear system \(Ax=b\): deflation of 0,...,15 Ritz vectors corresponding
+          to Ritz values of smallest magnitude
+        </hgroup>
+        <article>
+          <figure style="width: 100%; text-align: center; ">
+            <img style="width: 70%" src="images/conv-diff.svg">
+            <figcaption>actual convergence (solid); bound (dashed); 
+              \(\nrm{\overline{r}_n}\) (dotted)</figcaption>
+          </figure>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Bound for convection-diffusion</h2>
+          Modified right hand side \(c=b+g\), \(\nrm{g}\approx 5\cdot 10^{-3}\)
+        </hgroup>
+        <article>
+          <figure style="width: 100%; text-align: center; ">
+            <img style="width: 70%" src="images/conv-diff-g.svg">
+            <figcaption>actual convergence (solid); bound (dashed)</figcaption>
+          </figure>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Bound for convection-diffusion</h2>
+          Modified matrix \(B=A+G\), \(\nrm{G}\approx 5\cdot 10^{-6}\)
+        </hgroup>
+        <article>
+          <figure style="width: 100%; text-align: center; ">
+            <img style="width: 70%" src="images/conv-diff-G.svg">
+            <figcaption>actual convergence (solid); bound (dashed)</figcaption>
+          </figure>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Conclusions</h2>
+          and stuff I haven't shown you...
+        </hgroup>
+        <article>
+          <ul>
+            <li>2 new deflation bounds:
+              <ul>
+                <li>eigenvalue perturbation theory + a priori bounds</li>
+                <li>approximate Krylov subspaces</li>
+              </ul>
+            </li>
+            <li>Implemented in <a
+                href="https://github.com/andrenarchy/krypy">KryPy</a> for the
+              automatic selection of recycling vectors.</li>
+            <li>Strategies based on the new bounds yield time savings of up to
+              40% in the solution of nonlinear Schrödinger equations with
+              Newton's method (G. and Schlömer, 2013).</li>
+            <li>Better perturbation theory for Krylov subspace methods
+              possible?</li>
+          </ul>
+        </article>
+      </slide>
+
       <slide id="slide_bound">
         <hgroup>
           <h2>References</h2>
@@ -595,6 +686,9 @@ URL: https://code.google.com/p/io-2012-slides
             <li>
               <strong>These slides can be watched online:</strong><br>
               <a href="https://andrenarchy.github.io/talk-2014-05-delft-phdthesis">https://andrenarchy.github.io/talk-2014-05-delft-phdthesis</a>
+            </li>
+            <li>
+              <strong>G., <em>Recycling Krylov subspace methods for sequences of linear systems.</em> PhD thesis, submitted April 2014.</strong>
             </li>
             <li>
               <strong>Software used for experiments (free open source software):</strong>
@@ -610,16 +704,6 @@ URL: https://code.google.com/p/io-2012-slides
                   <a href="https://bitbucket.org/nschloe/pynosh">https://bitbucket.org/nschloe/pynosh</a>
                 </li>
               </ul>
-            </li>
-            <li>
-              Chapman and Saad,
-              <em>Deflated and augmented Krylov subspace techniques.</em>
-              1997. Numer. Linear Algebra Appl.
-            </li>
-            <li>
-              Erhel, Burrage and Pohl,
-              <em>Restarted GMRES preconditioned by deflation.</em>
-              1996. J. Comput. Appl. Math.
             </li>
             <li>
               G., Gutknecht, Liesen and Nabben,
@@ -638,16 +722,6 @@ URL: https://code.google.com/p/io-2012-slides
               <em>GMRES convergence for perturbed coefficient matrices,
                 with Application to Approximate Deflation Preconditioning.</em>
               2013. SIMAX.
-            </li>
-            <li>
-              Simoncini and Szyld,
-              <em>On the Superlinear Convergence of MINRES.</em>
-              2013. In Num. Math. and Adv. Appl. 2011.
-            </li>
-            <li>
-              Wang, de Sturler and Paulino,
-              <em>Large-scale topology optimization using preconditioned Krylov subspace methods with recycling.</em>
-              2007. Internat. J. Numer. Methods Engrg.
             </li>
           </ul>
         </article>

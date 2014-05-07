@@ -1,0 +1,11 @@
+\documentclass[tikz,convert={outfile=\jobname.svg}]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\begin{document}
+  \newlength\figurewidth
+  \newlength\figureheight
+  \setlength\figurewidth{24em}
+  \setlength\figureheight{20em}
+  \input{conv_diff_G.tikz}
+\end{document}
