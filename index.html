@@ -67,8 +67,8 @@ URL: https://code.google.com/p/io-2012-slides
       });
     </script>
     <!--script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
-    <script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <!--script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
+    <!--script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script>
       document.addEventListener('slideenter', function(e) {
           MathJax.Hub.Queue(["Typeset", MathJax.Hub, e.target]);
@@ -186,7 +186,6 @@ URL: https://code.google.com/p/io-2012-slides
             <dt>Required:</dt>
             <dd><p>perturbation theory for</p>
               <ul>
-                <li>projections</li>
                 <li>spectra of deflated matrices</li>
                 <li>Krylov subspace methods</li>
               </ul>
@@ -339,118 +338,6 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
-          <h2>Perturbation bound for projections</h2>
-        </hgroup>
-        <article>
-            <div class="box" data-title="Theorem (G. 2013)">
-                Let \(\vsV,\vsW,\vsX,\vsY\subseteq\C^N\) be nonzero
-                subspaces such that \(\C^N=\vsV\oplus\vsW=\vsX\oplus\vsY\).
-                Then:
-                \[
-                \nrm{P_{\vsV,\vsW}-P_{\vsX,\vsY}}
-                \leq \frac{
-                \sin\theta_{\max}(\vsW,\vsY) +
-                \sin\theta_{\max}(\vsV,\vsX)}{
-                \sin\theta_{\min}(\vsV,\vsW)
-                \sin\theta_{\min}(\vsX,\vsY)}.
-                \]
-            </div>
-            <p>\(\theta_{\max}(\vsV,\vsW):=\arcsin\|P_\vsV-P_\vsW\|\) is the
-              maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
-            <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\big(
-              \max_{\substack{0\neq v\in\vsV\\0\neq w\in\vsW}} \frac{|\ip{v}{w}|}{\nrm{v}\nrm{w}}
-              \big)
-                \) is the
-              minimal canonical angle between \(\vsV\) and \(\vsW\).</p>
-        </article>
-      </slide>
-
-      <slide id="slide_bound">
-          <hgroup>
-              <h2>Perturbation bound in action</h2>
-          </hgroup>
-          <article>
-              <figure style="width: 100%; ">
-                  <div id="proj_bound" class="jxgbox plot"></div>
-                  <figcaption>
-                      \(\nrm{P_{\vsX,\vsY}z-P_{\vsV,\vsW}z}=\)&nbsp;<span id="normresult">0.0</span>,<br/>
-                      bound: \(\frac{
-                  \sin\theta_{\max}(\vsW,\vsY) +
-                  \sin\theta_{\max}(\vsV,\vsX)}{
-                  \sin\theta_{\min}(\vsV,\vsW)
-                  \sin\theta_{\min}(\vsX,\vsY)}
-                  \) = <span id="boundresult">0.0</span>.
-                  </figcaption>
-              </figure>
-              <script type="text/javascript">
-                  proj_bound = null;
-                  onSlideEnter('slide_bound', function() {
-                      if(!proj_bound) {
-                          var b = JXG.JSXGraph.initBoard('proj_bound', {boundingbox: [-3, -1.5, 3, 1.5],keepaspectratio: true});
-                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#000000'});
-                          var c = b.create('circle', [p0, 1]);
-                          var pz = b.create('glider', [1,1,c], {name:'z',size:4,withLabel:false});
-                          addMathLabel(b, pz, '\\(z \\)');
-
-                          var px = b.create('point',[-1.2,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                          addMathLabel(b, px, '\\(\\vsX \\)');
-                          var lX = b.create('line',['0','X']);
-                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
-                          addMathLabel(b, py, '\\(\\vsY \\)');
-                          var lY = b.create('line',['0','Y']);
-                          addMathLabel(b, pz, '\\(z \\)');
-                          function projXY() {
-                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
-                          }
-                          var PXYz = b.create('point', [function() {return projXY()[0];}, function() {return projXY()[1];}], {name:'PXYz',size:4,withLabel:false});
-                          addMathLabel(b, PXYz, '\\(P_{\\vsX,\\vsY}z \\)');
-                          var lzPXYz = b.create('line', ['z','PXYz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-
-                          var pv = b.create('point',[-1.2,0.2], {name:'V',size:4,color:'#5E5E5E',withLabel:false});
-                          addMathLabel(b, pv, '\\(\\vsV \\)');
-                          var lV = b.create('line',['0','V'],{strokeColor:'#5E5E5E'});
-                          var pw = b.create('point',[-0.7,1], {name:'W',size:4,color:'#5E5E5E',withLabel:false});
-                          addMathLabel(b, pw, '\\(\\vsW \\)');
-                          var lW = b.create('line',['0','W'],{strokeColor:'#5E5E5E'});
-                          function projVW() {
-                              return proj( [pv.X(),pv.Y()], [pw.Y(),-pw.X()], [pz.X(),pz.Y()]);
-                          }
-                          var PVWz = b.create('point', [function() {return projVW()[0];}, function() {return projVW()[1];}], {name:'PVWz',size:4,withLabel:false});
-                          var lPVWXYz = b.create('line',['PVWz','PXYz'],{strokeColor:'#ff0000', straightFirst:false, straightLast:false, strokeWidth:2});
-
-                          addMathLabel(b, PVWz, '\\(P_{\\vsV,\\vsW}z \\)');
-                          var lzPVWz = b.create('line', ['z','PVWz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2,strokeColor:'#5E5E5E'});
-
-                          b.addHook(function(){
-                                  var x = [px.X(),px.Y()],
-                                      y = [py.X(),py.Y()],
-                                      v = [pv.X(),pv.Y()],
-                                      w = [pw.X(),pw.Y()],
-                                      zXY = [PXYz.X(),PXYz.Y()],
-                                      zVW = [PVWz.X(),PVWz.Y()];
-                                  var normreal = norm(daxpy(-1,zXY,zVW));
-                                  var normspan = document.getElementById('normresult');
-                                  normspan.replaceChild( document.createTextNode(normreal.toFixed(4)), normspan.firstChild);
-
-                                  var cosa = Math.abs(inner(w,y)/(norm(w)*norm(y)));
-                                  var cosb = Math.abs(inner(x,v)/(norm(x)*norm(v)));
-                                  var cosg = Math.abs(inner(v,orth(w))/(norm(v)*norm(orth(w))));
-                                  var cosd = Math.abs(inner(x,orth(y))/(norm(x)*norm(orth(y))));
-                                  var bound = (Math.sin(Math.acos(cosa))+Math.sin(Math.acos(cosb)))/(cosg*cosd);
-                                  var boundspan = document.getElementById('boundresult');
-                                  boundspan.replaceChild( document.createTextNode(bound.toFixed(4)), boundspan.firstChild);
-
-                              }, 'move');
-
-                          proj_bound = b;
-                      }
-                  });
-              </script>
-          </article>
-      </slide>
-
-      <slide>
-        <hgroup>
           <h2>Spectra of perturbed deflated matrices</h2>
         </hgroup>
         <article>
@@ -599,6 +486,12 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
       </slide>
 
+      <slide class="segue midtitle">
+        <hgroup class="auto-fadein">
+          <h2>Numerical experiments with the approximate Krylov subspace bound and convection-diffusion</h2>
+        </hgroup>
+      </slide>
+
       <slide>
         <hgroup>
           <h2>Convection-diffusion</h2>
@@ -668,7 +561,7 @@ URL: https://code.google.com/p/io-2012-slides
             <ul>
               <li>Derived 2 new bounds for deflation:
                 <ul>
-                  <li>quadratic residual bound for \(\Lambda(QA)\)</li>
+                  <li>quadratic Ritz residual bound for \(\Lambda(QA)\)</li>
                   <li>approximate Krylov subspace bound for GMRES</li>
                 </ul>
               </li>
@@ -754,6 +647,125 @@ URL: https://code.google.com/p/io-2012-slides
           <!-- populated from slide_config.json -->
         </p>
       </slide>
+
+      <slide class="segue midtitle">
+        <hgroup class="auto-fadein">
+          <h2>Appendix: perturbation bound for projections</h2>
+        </hgroup>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Perturbation bound for projections</h2>
+        </hgroup>
+        <article>
+            <div class="box" data-title="Theorem (G. 2013)">
+                Let \(\vsV,\vsW,\vsX,\vsY\subseteq\C^N\) be nonzero
+                subspaces such that \(\C^N=\vsV\oplus\vsW=\vsX\oplus\vsY\).
+                Then:
+                \[
+                \nrm{P_{\vsV,\vsW}-P_{\vsX,\vsY}}
+                \leq \frac{
+                \sin\theta_{\max}(\vsW,\vsY) +
+                \sin\theta_{\max}(\vsV,\vsX)}{
+                \sin\theta_{\min}(\vsV,\vsW)
+                \sin\theta_{\min}(\vsX,\vsY)}.
+                \]
+            </div>
+            <p>\(\theta_{\max}(\vsV,\vsW):=\arcsin\|P_\vsV-P_\vsW\|\) is the
+              maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
+            <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\big(
+              \max_{\substack{0\neq v\in\vsV\\0\neq w\in\vsW}} \frac{|\ip{v}{w}|}{\nrm{v}\nrm{w}}
+              \big)
+                \) is the
+              minimal canonical angle between \(\vsV\) and \(\vsW\).</p>
+        </article>
+      </slide>
+
+      <slide id="slide_bound">
+          <hgroup>
+              <h2>Perturbation bound in action</h2>
+          </hgroup>
+          <article>
+              <figure style="width: 100%; ">
+                  <div id="proj_bound" class="jxgbox plot"></div>
+                  <figcaption>
+                      \(\nrm{P_{\vsX,\vsY}z-P_{\vsV,\vsW}z}=\)&nbsp;<span id="normresult">0.0</span>,<br/>
+                      bound: \(\frac{
+                  \sin\theta_{\max}(\vsW,\vsY) +
+                  \sin\theta_{\max}(\vsV,\vsX)}{
+                  \sin\theta_{\min}(\vsV,\vsW)
+                  \sin\theta_{\min}(\vsX,\vsY)}
+                  \) = <span id="boundresult">0.0</span>.
+                  </figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_bound = null;
+                  onSlideEnter('slide_bound', function() {
+                      if(!proj_bound) {
+                          var b = JXG.JSXGraph.initBoard('proj_bound', {boundingbox: [-3, -1.5, 3, 1.5],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#000000'});
+                          var c = b.create('circle', [p0, 1]);
+                          var pz = b.create('glider', [1,1,c], {name:'z',size:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z \\)');
+
+                          var px = b.create('point',[-1.2,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX \\)');
+                          var lX = b.create('line',['0','X']);
+                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, py, '\\(\\vsY \\)');
+                          var lY = b.create('line',['0','Y']);
+                          addMathLabel(b, pz, '\\(z \\)');
+                          function projXY() {
+                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                          }
+                          var PXYz = b.create('point', [function() {return projXY()[0];}, function() {return projXY()[1];}], {name:'PXYz',size:4,withLabel:false});
+                          addMathLabel(b, PXYz, '\\(P_{\\vsX,\\vsY}z \\)');
+                          var lzPXYz = b.create('line', ['z','PXYz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+
+                          var pv = b.create('point',[-1.2,0.2], {name:'V',size:4,color:'#5E5E5E',withLabel:false});
+                          addMathLabel(b, pv, '\\(\\vsV \\)');
+                          var lV = b.create('line',['0','V'],{strokeColor:'#5E5E5E'});
+                          var pw = b.create('point',[-0.7,1], {name:'W',size:4,color:'#5E5E5E',withLabel:false});
+                          addMathLabel(b, pw, '\\(\\vsW \\)');
+                          var lW = b.create('line',['0','W'],{strokeColor:'#5E5E5E'});
+                          function projVW() {
+                              return proj( [pv.X(),pv.Y()], [pw.Y(),-pw.X()], [pz.X(),pz.Y()]);
+                          }
+                          var PVWz = b.create('point', [function() {return projVW()[0];}, function() {return projVW()[1];}], {name:'PVWz',size:4,withLabel:false});
+                          var lPVWXYz = b.create('line',['PVWz','PXYz'],{strokeColor:'#ff0000', straightFirst:false, straightLast:false, strokeWidth:2});
+
+                          addMathLabel(b, PVWz, '\\(P_{\\vsV,\\vsW}z \\)');
+                          var lzPVWz = b.create('line', ['z','PVWz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2,strokeColor:'#5E5E5E'});
+
+                          b.addHook(function(){
+                                  var x = [px.X(),px.Y()],
+                                      y = [py.X(),py.Y()],
+                                      v = [pv.X(),pv.Y()],
+                                      w = [pw.X(),pw.Y()],
+                                      zXY = [PXYz.X(),PXYz.Y()],
+                                      zVW = [PVWz.X(),PVWz.Y()];
+                                  var normreal = norm(daxpy(-1,zXY,zVW));
+                                  var normspan = document.getElementById('normresult');
+                                  normspan.replaceChild( document.createTextNode(normreal.toFixed(4)), normspan.firstChild);
+
+                                  var cosa = Math.abs(inner(w,y)/(norm(w)*norm(y)));
+                                  var cosb = Math.abs(inner(x,v)/(norm(x)*norm(v)));
+                                  var cosg = Math.abs(inner(v,orth(w))/(norm(v)*norm(orth(w))));
+                                  var cosd = Math.abs(inner(x,orth(y))/(norm(x)*norm(orth(y))));
+                                  var bound = (Math.sin(Math.acos(cosa))+Math.sin(Math.acos(cosb)))/(cosg*cosd);
+                                  var boundspan = document.getElementById('boundresult');
+                                  boundspan.replaceChild( document.createTextNode(bound.toFixed(4)), boundspan.firstChild);
+
+                              }, 'move');
+
+                          proj_bound = b;
+                      }
+                  });
+              </script>
+          </article>
+      </slide>
+
 
       <slide class="dark nobackground">
         <article class="flexbox vcenter">
