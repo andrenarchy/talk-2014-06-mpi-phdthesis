@@ -150,29 +150,29 @@ dd {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('/theme/fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
+  src: local('Open Sans'), local('OpenSans'), url('theme/fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
-  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url('/theme/fonts/Open_Sans/OpenSans-Semibold.ttf') format('truetype');
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url('theme/fonts/Open_Sans/OpenSans-Semibold.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 400;
-  src: local('Open Sans Italic'), local('OpenSans-Italic'), url('/theme/fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url('theme/fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 600;
-  src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url('/theme/fonts/Open_Sans/OpenSans-SemiboldItalic.ttf') format('truetype');
+  src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url('theme/fonts/Open_Sans/OpenSans-SemiboldItalic.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 400;
-  src: local('Source Code Pro'), local('SourceCodePro-Regular'), url('/theme/fonts/Source_Code_Pro/SourceCodePro-Regular.ttf') format('truetype');
+  src: local('Source Code Pro'), local('SourceCodePro-Regular'), url('theme/fonts/Source_Code_Pro/SourceCodePro-Regular.ttf') format('truetype');
 }
