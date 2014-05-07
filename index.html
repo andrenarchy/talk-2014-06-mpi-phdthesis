@@ -67,8 +67,8 @@ URL: https://code.google.com/p/io-2012-slides
       });
     </script>
     <!--script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
-    <!--script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!--script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
     <script>
       document.addEventListener('slideenter', function(e) {
           MathJax.Hub.Queue(["Typeset", MathJax.Hub, e.target]);
@@ -309,6 +309,30 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
+          <h2>Spectra of deflated matrices</h2>
+        </hgroup>
+        <article>
+          <div class="box" data-title="Theorem (G. 2014)">
+            Let \(U_\perp\in\C^{N,N-m}\) such that
+            \(\vsU^\perp=\vsR(U_\perp)\) and \(U_\perp^*U_\perp=I\). Then
+            \[QA=U_\perp (U_\perp^*A^{-1}U_\perp)^{-1} U_\perp^*.\]
+          </div>
+          <div class="box" data-title="Corollary (G. 2014)">
+            For \(m>0\), the spectrum of \(QA\) is
+            \[
+            \Lambda(QA)=\{0\}\cup\Lambda\left(
+              (U_\perp^*A^{-1}U_\perp)^{-1}
+            \right).
+            \]
+          </div>
+          <p>Note: no restrictions on symmetry or definiteness.</p>
+          <p>If \(U\) spans an \(A\)-invariant subspace, then things are easy.
+            But not much is known if \(U\) is only an approximation.</p>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
           <h2>Perturbation bound for projections</h2>
         </hgroup>
         <article>
@@ -421,51 +445,24 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
-          <h2>Spectra of deflated operators</h2>
+          <h2>Spectra of perturbed deflated matrices</h2>
         </hgroup>
         <article>
           <div class="box" data-title="Theorem (G. 2014)">
-            Let \(U_\perp\in\C^{N,N-m}\) such that
-            \(\vsU^\perp=\vsR(U_\perp)\) and \(U_\perp^*U_\perp=I\). Then
-            \[QA=U_\perp (U_\perp^*A^{-1}U_\perp)^{-1} U_\perp^*.\]
-          </div>
-          <div class="box" data-title="Corollary (G. 2014)">
-            For \(m>0\), the spectrum of \(QA\) is
-            \[
-            \Lambda(QA)=\{0\}\cup\Lambda\left(
-              (U_\perp^*A^{-1}U_\perp)^{-1}
-            \right).
-            \]
-          </div>
-          <p>Note: no restrictions on symmetry or definiteness.</p>
-          <p>If \(U\) spans an \(A\)-invariant subspace, then things are easy.
-            But not much is known if \(U\) is only an approximation.</p>
-        </article>
-      </slide>
-
-      <slide>
-        <hgroup>
-          <h2>Spectra of perturbed deflated operators</h2>
-        </hgroup>
-        <article>
-          <div class="box" data-title="Theorem (G. 2014)">
+            <p>
             Let \(A=A^*\), \(U^*U=I\), \(R=AU-U(U^*AU)\), \(\Lambda(U^*AU)=\{\mu_1,\dots,\mu_m\}\)
             and
             \(\Lambda(QA)
-            =\{0\}\cup\{\hat{\lambda}_1\leq\dots\leq\hat{\lambda}_{N-m}\}\).
-            If
-            <ul>
-              <li>the eigenvalues \(\lambda_1,\dots,\lambda_N\) of \(A\) are
-                ordered appropriately (*),</li>
-              <li>\(\delta_i:=\min_{j=1,\dots,m}|\lambda_i-\mu_j|>0\) for a
-                \(1\leq i\leq N-m\),</li>
-              <li>and \(\mu_{\min}:=\min\{|\mu_1|,\dots,|\mu_m|\}>0\) then</li>
-            </ul>
+            =\{0\}\cup\{\hat{\lambda}_1\leq\dots\leq\hat{\lambda}_{N-m}\}\).</p>
+
+          <p>For an appropriate ordering (*) of the eigenvalues \(\lambda_1,\dots,\lambda_N\) of \(A\), we have
             \[
             |\lambda_i - \hat{\lambda}_i|\leq\nrm{R}^2
             \left(\frac{1}{\delta_i} + \frac{1}{\mu_{\min}}
-            \right).
+            \right),
             \]
+            where \(\delta_i:=\min_{j=1,\dots,m}|\lambda_i-\mu_j|>0\).
+          </p>
           </div>
           <p>(*) technical (but explicitly given) ordering is omitted here.</p>
         </article>
@@ -505,16 +502,15 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
           <p>Remember: we solve sequences of linear systems!</p>
           <p>The data that is generated in the solution of one linear system
-            reveals much more than just the Ritz vectors that are used in
-            \(Q\)!</p>
-          <p>Let's assume that a linear system has been solved
-            approximately with deflated GMRES, e.g., GMRES was applied to
+            reveals much more than just Ritz vectors!</p>
+          <p>We apply GMRES to
             \[ QAx=Qb, \qquad\text{where}\qquad Q=I-AU(U^*AU)^{-1}U^*.\]
             \(\lra\) Arnoldi relation \(QAV_n=V_{n+1}\underline{H}_n\).
           </p>
+          <p>We choose a basis \(W=[V_n,U]\widetilde{W}\in\C^{N,k}\) of the new
+            deflation subspace.</p>
           <div class="box" data-title="Question">
-            If \(W=[V_n,U]\widetilde{W}\) is a basis of the new deflation
-            subspace, how does GMRES perform for
+            How does GMRES perform for
             \[ Q_WAx=Q_Wb,~\text{where}~Q_W=I-AW(W^*AW)^{-1}W^*?\]
           </div>
         </article>
@@ -529,19 +525,16 @@ URL: https://code.google.com/p/io-2012-slides
           <p>But an Arnoldi relation for a perturbed matrix and initial vector
             is available!</p>
           <div class="box" data-title="Theorem (G. 2014)">
-            Let \(QAV_n=V_{n+1}\underline{H}_n\) be an Arnoldi relation for
-            \(K_n(QA,Qb)\) and \(W=[V_n,U]\widetilde{W}\in\C^{N,k}\). Then an
-            Arnoldi relation
-            \[ (Q_WA+F_i)\widehat{V}_i
-              =\widehat{V}_{i+1}\widehat{\underline{H}}_i
-            \]
-            for \(K_i(Q_WA+F_i, Q_Wb+f)\) can be constructed for all \(1\leq
-            i\leq n+m-k\) without
-            applications of \(Q_W\) or \(A\) such that \(F_i\) and \(f\) are
-            optimal with respect to \(K_i(QA,Qb)+\vsU\). Furthermore,
-            \(\nrm{F_i}\) and \(\nrm{f}\) are available and
-            \(\nrm{F_1}\leq\nrm{F_2}\leq\dots\) holds.
+            An Arnoldi relation for \(K_i(Q_WA+F_i, Q_Wb+f)\) can be
+            constructed from \(V_n\) and \(\underline{H}_n\) for \(1\leq i\lt
+            m+n-k\), such that \(F_i\) and \(f\) are optimal with respect to
+            \(K_i(QA,Qb)+\vsU\).  Furthermore, \(\nrm{F_i}\) and \(\nrm{f}\)
+            are available and \(\nrm{F_1}\leq\nrm{F_2}\leq\dots\).
           </div>
+          <p>The Hessenberg matrix \(\widehat{H}_n\) of the Arnoldi relation
+            reveals the GMRES residual norms for
+            \((Q_WA+F_i)\widehat{x}=Q_Wb+f\).</p>
+          <p>Goal: bound GMRES residual norms for \(Q_WAx=Q_Wb\).</p>
         </article>
       </slide>
 
