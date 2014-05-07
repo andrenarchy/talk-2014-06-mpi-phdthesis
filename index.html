@@ -307,6 +307,12 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
       </slide>
 
+      <slide class="segue midtitle">
+        <hgroup class="auto-fadein">
+          <h2>Spectra of deflated matrices and a priori bounds</h2>
+        </hgroup>
+      </slide>
+
       <slide>
         <hgroup>
           <h2>Spectra of deflated matrices</h2>
@@ -351,11 +357,11 @@ URL: https://code.google.com/p/io-2012-slides
             </div>
             <p>\(\theta_{\max}(\vsV,\vsW):=\arcsin\|P_\vsV-P_\vsW\|\) is the
               maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
-            <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\left(
-              \max_{0\neq (v,w)\in\vsV\times\vsW} \frac{|\ip{v}{w}|}{\nrm{v}\nrm{w}}
-              \right)
+            <p>\(\theta_{\min}(\vsV,\vsW):= \arccos\big(
+              \max_{\substack{0\neq v\in\vsV\\0\neq w\in\vsW}} \frac{|\ip{v}{w}|}{\nrm{v}\nrm{w}}
+              \big)
                 \) is the
-              maximal canonical angle between \(\vsV\) and \(\vsW\).</p>
+              minimal canonical angle between \(\vsV\) and \(\vsW\).</p>
         </article>
       </slide>
 
@@ -493,6 +499,12 @@ URL: https://code.google.com/p/io-2012-slides
             Another approach is required!
           </div>
         </article>
+      </slide>
+
+      <slide class="segue midtitle">
+        <hgroup class="auto-fadein">
+          <h2>Approximate Krylov subspaces and deflated GMRES bounds</h2>
+        </hgroup>
       </slide>
 
       <slide>
@@ -649,28 +661,31 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
-          <h2>Conclusions</h2>
-          and stuff I haven't shown you...
+          <h2>Summary and outlook</h2>
         </hgroup>
         <article>
-          <ul>
-            <li>2 new deflation bounds:
-              <ul>
-                <li>eigenvalue perturbation theory + a priori bounds</li>
-                <li>approximate Krylov subspaces</li>
-              </ul>
-            </li>
-            <li>Implemented in <a
-                href="https://github.com/andrenarchy/krypy">KryPy</a> for the
-              automatic selection of recycling vectors.</li>
-            <li>Strategies based on the new bounds yield time savings of up
-              to 40% in the solution of nonlinear Schrödinger equations
-              with Newton's method (G. and Schlömer, 2013).</li>
-            <li>Full characterization of \(\Lambda(QA)\) and perturbation
-              bound for projections may be very useful...</li>
-            <li>Better perturbation theory for Krylov subspace methods
-              possible?</li>
-          </ul>
+          <p>
+            <ul>
+              <li>Derived 2 new bounds for deflation:
+                <ul>
+                  <li>quadratic residual bound for \(\Lambda(QA)\)</li>
+                  <li>approximate Krylov subspace bound for GMRES</li>
+                </ul>
+              </li>
+              <li>Implemented in <a
+                  href="https://github.com/andrenarchy/krypy">KryPy</a> for the
+                automatic selection of recycling vectors.</li>
+              <li>Time savings of up to 40% with the strategies based on the new
+                bounds in the solution of nonlinear Schrödinger equations with
+                Newton's method (G. and Schlömer, 2013).</li>
+            </ul>
+          </p>
+          <p>Subject to further work:
+            <ul>
+              <li>Exploit full characterization of \(\Lambda(QA)\).</li>
+              <li>Better perturbation theory for Krylov subspace methods.</li>
+            </ul>
+          </p>
         </article>
       </slide>
 

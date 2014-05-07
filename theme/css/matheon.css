@@ -176,3 +176,8 @@ dd {
   font-weight: 400;
   src: local('Source Code Pro'), local('SourceCodePro-Regular'), url('../fonts/Source_Code_Pro/SourceCodePro-Regular.ttf') format('truetype');
 }
+
+.midtitle h2 {
+    color: black;
+    line-height: 1;
+}
