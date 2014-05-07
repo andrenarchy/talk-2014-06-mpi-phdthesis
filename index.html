@@ -147,7 +147,7 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
           <dl>
             <dt>The problem:</dt>
-            <dd>a sequence of linear systems
+            <dd>A sequence of linear systems
               \[
                 A_i x_i = b_i\quad\text{for}\quad i=1,2,...
               \]
@@ -155,7 +155,7 @@ URL: https://code.google.com/p/io-2012-slides
             </dd>
 
             <dt>A solution:</dt>
-            <dd><p>recycling via <em>deflation</em>.</p>
+            <dd><p>Recycling via <em>deflation</em>.</p>
               <p>Apply Krylov subspace method to
                 \[
                   P_i A_i x_i = P_i b_i,
@@ -170,6 +170,7 @@ URL: https://code.google.com/p/io-2012-slides
               </ul>
             </dd>
           </dl>
+          See, e.g., Kilmer and de Sturler (2006).
         </article>
       </slide>
 
@@ -312,8 +313,8 @@ URL: https://code.google.com/p/io-2012-slides
         </hgroup>
         <article>
             <div class="box" data-title="Theorem (G. 2013)">
-                Let \(\vsV,\vsW,\vsX,\vsY\subseteq\vsH\) be closed and nonzero
-                subspaces such that \(\vsH=\vsV\oplus\vsW=\vsX\oplus\vsY\).
+                Let \(\vsV,\vsW,\vsX,\vsY\subseteq\C^N\) be nonzero
+                subspaces such that \(\C^N=\vsV\oplus\vsW=\vsX\oplus\vsY\).
                 Then:
                 \[
                 \nrm{P_{\vsV,\vsW}-P_{\vsX,\vsY}}
@@ -669,9 +670,11 @@ URL: https://code.google.com/p/io-2012-slides
             <li>Implemented in <a
                 href="https://github.com/andrenarchy/krypy">KryPy</a> for the
               automatic selection of recycling vectors.</li>
-            <li>Strategies based on the new bounds yield time savings of up to
-              40% in the solution of nonlinear Schrödinger equations with
-              Newton's method (G. and Schlömer, 2013).</li>
+            <li>Strategies based on the new bounds yield time savings of up
+              to 40% in the solution of nonlinear Schrödinger equations
+              with Newton's method (G. and Schlömer, 2013).</li>
+            <li>Full characterization of \(\Lambda(QA)\) and perturbation
+              bound for projections may be very useful...</li>
             <li>Better perturbation theory for Krylov subspace methods
               possible?</li>
           </ul>
@@ -718,6 +721,11 @@ URL: https://code.google.com/p/io-2012-slides
               2013 (under revision).
               <a href="http://arxiv.org/abs/1208.0264">http://arxiv.org/abs/1208.0264</a>
             </li>
+            <li>
+              Kilmer and de Sturler,
+              <em>Recycling subspace information for diffuse optical
+                tomography.</em>
+              2006. SISC.
             <li>
               Sifuentes, Embree and Morgan,
               <em>GMRES convergence for perturbed coefficient matrices,
