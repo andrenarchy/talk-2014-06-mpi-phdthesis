@@ -2,7 +2,7 @@ var SLIDE_CONFIG = {
   // Slide settings
   settings: {
     title: 'Recycling Krylov subspace methods for sequences of linear systems',
-    subtitle: 'TU Delft, May 2014',
+    subtitle: 'MPI Magdeburg, June 2014',
     useBuilds: true, // Default: true. False will turn off slide animation builds.
     usePrettify: true, // Default: true
     enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.

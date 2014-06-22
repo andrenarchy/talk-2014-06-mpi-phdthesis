@@ -67,8 +67,8 @@ URL: https://code.google.com/p/io-2012-slides
       });
     </script>
     <!--script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
-    <!--script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!--script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script-->
     <script>
       document.addEventListener('slideenter', function(e) {
           MathJax.Hub.Queue(["Typeset", MathJax.Hub, e.target]);
@@ -203,71 +203,6 @@ URL: https://code.google.com/p/io-2012-slides
         </article>
       </slide>
 
-      <slide id="slide_picz">
-          <hgroup>
-              <h2>Orthogonal vs. oblique projections</h2>
-          </hgroup>
-          <article style="position: relative;">
-              <figure style="width: 48%; position: absolute; top: 0; left: 0;">
-                  <div id="proj_ortho" class="jxgbox plot"></div>
-                  <figcaption>Orthogonal projection onto \(\vsX\): \(P_{\vsX}=X(X^*X)^{-1}X^*\)</figcaption>
-              </figure>
-              <script type="text/javascript">
-                  proj_ortho = null;
-                  onSlideEnter('slide_picz', function() {
-                      if (!proj_ortho) {
-                          var b = JXG.JSXGraph.initBoard('proj_ortho', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
-                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
-                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                          addMathLabel(b, px, '\\(\\vsX\\)');
-                          var lX = b.create('line',['0','X']);
-                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
-                          addMathLabel(b, pz, '\\(z\\)');
-                          function orthoproj() {
-                              return proj( [px.X(),px.Y()], [px.X(),px.Y()], [pz.X(),pz.Y()]);
-                          }
-                          var Pz = b.create('point', [function() {return orthoproj()[0];}, function() {return orthoproj()[1];}], {name:'Pz',size:4,withLabel:false});
-                          addMathLabel(b, Pz, '\\(P_\\vsX z\\)');
-                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-                          proj_ortho = b;
-                      }
-                  });
-              </script>
-              <figure style="width: 48%; position: absolute; top: 0; right: 0;">
-                  <div id="proj_obli" class="jxgbox plot"></div>
-                  <figcaption>
-                      Oblique projection onto \(\vsX\) along
-                      \(\vsY=\vsR(Y)^\perp\):
-                      \(P_{\vsX,\vsY} = X (Y^*X)^{-1}Y^*\)
-                  </figcaption>
-              </figure>
-              <script type="text/javascript">
-                  proj_obli = null;
-                  onSlideEnter('slide_picz', function() {
-                      if(!proj_obli) {
-                          var b = JXG.JSXGraph.initBoard('proj_obli', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
-                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
-                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
-                          addMathLabel(b, px, '\\(\\vsX \\)');
-                          var lX = b.create('line',['0','X']);
-                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
-                          addMathLabel(b, py, '\\(\\vsY \\)');
-                          var lY = b.create('line',['0','Y']);
-                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
-                          addMathLabel(b, pz, '\\(z \\)');
-                          function obliqueproj() {
-                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
-                          }
-                          var Pz = b.create('point', [function() {return obliqueproj()[0];}, function() {return obliqueproj()[1];}], {name:'Pz',size:4,withLabel:false});
-                          addMathLabel(b, Pz, '\\(P_{\\vsX,\\vsY}z \\)');
-                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
-                          proj_obli = b;
-                      }
-                  });
-              </script>
-          </article>
-      </slide>
-
       <slide>
         <hgroup>
           <h2>Assumptions and definitions</h2>
@@ -278,8 +213,8 @@ URL: https://code.google.com/p/io-2012-slides
             <li>\(U\in\C^{N,m}\) such that \(U^*AU\) is nonsingular (equivalent:
               \(A\vsU\oplus\vsU^\perp=\C^N\) for
               \(\vsU:=\vsR(U)\))</li>
-            <li>\(Q:=P_{\vsU^\perp,A\vsU}=I-AU(U^*AU)^{-1}U^*\)</li>
-            <li>\(P:=P_{(A^*\vsU)^\perp,\vsU}=I-U(U^*AU)^{-1}U^*A\)</li>
+            <li>Projection \(Q:=P_{\vsU^\perp,A\vsU}=I-AU(U^*AU)^{-1}U^*\)</li>
+            <li>Projection \(P:=P_{(A^*\vsU)^\perp,\vsU}=I-U(U^*AU)^{-1}U^*A\)</li>
           </ul>
         </article>
       </slide>
@@ -300,9 +235,9 @@ URL: https://code.google.com/p/io-2012-slides
           </div>
           <p>Well-known for CG. The result for GMRES/MINRES follows from a
             theorem by G., Gutknecht, Liesen and Nabben (2013) which
-            characterizes all consistent linear systems \(Ax=b\) with singular
+            characterizes all consistent linear systems \(By=c\) with singular
             matrices for which GMRES is well-defined for all initial guesses:
-            \(\vsR(A)\cap\vsN(A)=\{0\}\).</p>
+            \(\vsR(B)\cap\vsN(B)=\{0\}\).</p>
         </article>
       </slide>
 
@@ -319,11 +254,11 @@ URL: https://code.google.com/p/io-2012-slides
         <article>
           <div class="box" data-title="Theorem (G. 2014)">
             Let \(U_\perp\in\C^{N,N-m}\) such that
-            \(\vsU^\perp=\vsR(U_\perp)\) and \(U_\perp^*U_\perp=I\). Then
+            \(\vsU^\perp=\vsR(U_\perp)\). Then
             \[QA=U_\perp (U_\perp^*A^{-1}U_\perp)^{-1} U_\perp^*.\]
           </div>
           <div class="box" data-title="Corollary (G. 2014)">
-            For \(m>0\), the spectrum of \(QA\) is
+            For \(m>0\) and \(U_\perp^*U_\perp=I\), the spectrum of \(QA\) is
             \[
             \Lambda(QA)=\{0\}\cup\Lambda\left(
               (U_\perp^*A^{-1}U_\perp)^{-1}
@@ -554,11 +489,12 @@ URL: https://code.google.com/p/io-2012-slides
 
       <slide>
         <hgroup>
-          <h2>Summary and outlook</h2>
+          <h2>Summary</h2>
         </hgroup>
         <article>
           <p>
             <ul>
+              <li>Full characterization of spectra of deflated matrices.</li>
               <li>Derived 2 new bounds for deflation:
                 <ul>
                   <li>quadratic Ritz residual bound for \(\Lambda(QA)\)</li>
@@ -568,15 +504,36 @@ URL: https://code.google.com/p/io-2012-slides
               <li>Implemented in <a
                   href="https://github.com/andrenarchy/krypy">KryPy</a> for the
                 automatic selection of recycling vectors.</li>
-              <li>Time savings of up to 40% with the strategies based on the new
-                bounds in the solution of nonlinear Schrödinger equations with
-                Newton's method (G. and Schlömer, 2013).</li>
+              <li>Time savings of up to 40% in the solution of nonlinear
+                Schrödinger equations with Newton's method (G. and Schlömer,
+                2013).</li>
             </ul>
           </p>
+          <p>Selection of further results in the thesis:
+            <ul>
+              <li>Characterization of <em>well-defined</em> deflated CG, MINRES and GMRES.</li>
+              <li>Perturbation bound on \(\|P-Q\|\) for <em>arbitrary</em>
+                projections.</li>
+            </ul>
+          </p>
+        </article>
+      </slide>
+
+      <slide>
+        <hgroup>
+          <h2>Outlook</h2>
+        </hgroup>
+        <article>
           <p>Subject to further work:
             <ul>
               <li>Exploit full characterization of \(\Lambda(QA)\).</li>
-              <li>Better perturbation theory for Krylov subspace methods.</li>
+              <li>Better perturbation theory for Krylov subspace methods.
+                <ul>
+                  <li>examples in the PhD thesis indicate: hard work.</li>
+                  <li>required for better selection strategies for recycling
+                    vectors.</li>
+                </ul>
+              </li>
             </ul>
           </p>
         </article>
@@ -601,12 +558,18 @@ URL: https://code.google.com/p/io-2012-slides
                 <li>
                   G.,
                   <em>KryPy: Krylov subspace methods package for Python.</em><br>
-                  <a href="https://github.com/andrenarchy/krypy">https://github.com/andrenarchy/krypy</a>
+                  <a href="https://github.com/andrenarchy/krypy">github.com/andrenarchy/krypy</a>
                 </li>
                 <li>
                   G. and Schlömer,
                   <em>PyNosh: Python framework for nonlinear Schrödinger equations.</em><br>
-                  <a href="https://bitbucket.org/nschloe/pynosh">https://bitbucket.org/nschloe/pynosh</a>
+                  <a href="https://github.com/nschloe/pynosh">github.com/nschloe/pynosh</a>
+                </li>
+                <li>
+                  G.,
+                  <em>PseudoPy: Computation and visualization of pseudospectra in
+Python.</em><br>
+                  <a href="https://github.com/andrenarchy/pseudopy">github.com/andrenarchy/pseudopy</a>
                 </li>
               </ul>
             </li>
@@ -619,7 +582,7 @@ URL: https://code.google.com/p/io-2012-slides
             <li>
               G. and Schlömer,
               <em>Preconditioned recycling Krylov subspace methods for self-adjoint problems.</em>
-              2013 (under revision).
+              2014 (revision submitted).
               <a href="http://arxiv.org/abs/1208.0264">http://arxiv.org/abs/1208.0264</a>
             </li>
             <li>
@@ -652,6 +615,71 @@ URL: https://code.google.com/p/io-2012-slides
         <hgroup class="auto-fadein">
           <h2>Appendix: perturbation bound for projections</h2>
         </hgroup>
+      </slide>
+
+      <slide id="slide_picz">
+          <hgroup>
+              <h2>Orthogonal vs. oblique projections</h2>
+          </hgroup>
+          <article style="position: relative;">
+              <figure style="width: 48%; position: absolute; top: 0; left: 0;">
+                  <div id="proj_ortho" class="jxgbox plot"></div>
+                  <figcaption>Orthogonal projection onto \(\vsX\): \(P_{\vsX}=X(X^*X)^{-1}X^*\)</figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_ortho = null;
+                  onSlideEnter('slide_picz', function() {
+                      if (!proj_ortho) {
+                          var b = JXG.JSXGraph.initBoard('proj_ortho', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX\\)');
+                          var lX = b.create('line',['0','X']);
+                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z\\)');
+                          function orthoproj() {
+                              return proj( [px.X(),px.Y()], [px.X(),px.Y()], [pz.X(),pz.Y()]);
+                          }
+                          var Pz = b.create('point', [function() {return orthoproj()[0];}, function() {return orthoproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                          addMathLabel(b, Pz, '\\(P_\\vsX z\\)');
+                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                          proj_ortho = b;
+                      }
+                  });
+              </script>
+              <figure style="width: 48%; position: absolute; top: 0; right: 0;">
+                  <div id="proj_obli" class="jxgbox plot"></div>
+                  <figcaption>
+                      Oblique projection onto \(\vsX\) along
+                      \(\vsY=\vsR(Y)^\perp\):
+                      \(P_{\vsX,\vsY} = X (Y^*X)^{-1}Y^*\)
+                  </figcaption>
+              </figure>
+              <script type="text/javascript">
+                  proj_obli = null;
+                  onSlideEnter('slide_picz', function() {
+                      if(!proj_obli) {
+                          var b = JXG.JSXGraph.initBoard('proj_obli', {boundingbox: [-2, 2, 2, -2],keepaspectratio: true});
+                          var p0 = b.create('point',[0,0], {name:'0',size:4,fixed:true,color:'#0000ff'});
+                          var px = b.create('point',[1,0], {name:'X',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, px, '\\(\\vsX \\)');
+                          var lX = b.create('line',['0','X']);
+                          var py = b.create('point',[-0.5,1], {name:'Y',size:4,color:'#0000ff',withLabel:false});
+                          addMathLabel(b, py, '\\(\\vsY \\)');
+                          var lY = b.create('line',['0','Y']);
+                          var pz = b.create('point', [-1,1], {name:'z',zize:4,withLabel:false});
+                          addMathLabel(b, pz, '\\(z \\)');
+                          function obliqueproj() {
+                              return proj( [px.X(),px.Y()], [py.Y(),-py.X()], [pz.X(),pz.Y()]);
+                          }
+                          var Pz = b.create('point', [function() {return obliqueproj()[0];}, function() {return obliqueproj()[1];}], {name:'Pz',size:4,withLabel:false});
+                          addMathLabel(b, Pz, '\\(P_{\\vsX,\\vsY}z \\)');
+                          var lzPz = b.create('line', ['z','Pz'], {straightFirst:false, straightLast:false, strokeWidth:2, dash:2});
+                          proj_obli = b;
+                      }
+                  });
+              </script>
+          </article>
       </slide>
 
       <slide>
